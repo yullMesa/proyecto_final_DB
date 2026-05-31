@@ -66,3 +66,13 @@ CREATE TABLE Detalle_Tickets (
     FOREIGN KEY (id_ticket) REFERENCES Tickets(id_ticket),
     FOREIGN KEY (id_butaca) REFERENCES Butacas(id_butaca)
 );
+
+
+-- Agregar la columna de membresía(Esto lo hice despues para poder utilizar el DCL en el proyecto)
+ALTER TABLE Clientes 
+ADD membresia VARCHAR(20) DEFAULT 'Corriente';
+
+-- Actualizar los datos existentes para que tengan una categoría
+UPDATE Clientes SET membresia = 'Premium' WHERE id_cliente IN (1, 4, 7, 10);
+UPDATE Clientes SET membresia = 'Platinum' WHERE id_cliente IN (2, 5, 8, 11);
+-- Los que no actualizamos quedarán como 'Corriente' por defecto
