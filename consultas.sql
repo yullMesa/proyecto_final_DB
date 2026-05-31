@@ -1,4 +1,4 @@
--- 1. JOIN: Listado de tickets con nombre de cliente, película y sala
+-- 1. JOIN: Listado de tickets con nombre de cliente, pelï¿½cula y sala
 -- yo Yull Sebastian Mesa le agregue los alias para que el sql server sepa de que tabla hablo al hacer =
 SELECT 
     T.id_ticket, C.nombre AS Cliente, P.titulo AS Pelicula, S.nombre_sala
@@ -8,7 +8,7 @@ JOIN Funciones F ON T.id_funcion = F.id_funcion
 JOIN Peliculas P ON F.id_pelicula = P.id_pelicula
 JOIN Salas S ON F.id_sala = S.id_sala;
 
--- 2. AGREGACIÓN: Total de boletos vendidos por cada película (COUNT + GROUP BY)
+-- 2. AGREGACIï¿½N: Total de boletos vendidos por cada pelï¿½cula (COUNT + GROUP BY)
 SELECT 
     P.titulo, COUNT(T.id_ticket) AS Total_Vendidos
 FROM Peliculas P
@@ -16,7 +16,7 @@ JOIN Funciones F ON P.id_pelicula = F.id_pelicula
 JOIN Tickets T ON F.id_funcion = T.id_funcion
 GROUP BY P.titulo;
 
--- 3. AGREGACIÓN: Precio promedio, mínimo y máximo de las funciones por sala (AVG, MIN, MAX)
+-- 3. AGREGACIï¿½N: Precio promedio, mï¿½nimo y mï¿½ximo de las funciones por sala (AVG, MIN, MAX)
 -- Decidi usar otras consultas a parte de los join
 SELECT 
     S.nombre_sala, 
@@ -33,3 +33,37 @@ SELECT
 FROM Clientes C
 JOIN Tickets T ON C.id_cliente = T.id_cliente
 WHERE C.membresia = 'Premium';
+
+
+-- 1. JOIN (Inner): Listado de tickets (Solo funciones con ventas)
+
+
+SELECT T.id_ticket, C.nombre AS Cliente, P.titulo AS Pelicula, S.nombre_sala
+FROM Tickets T
+INNER JOIN Clientes C ON T.id_cliente = C.id_cliente
+INNER JOIN Funciones F ON T.id_funcion = F.id_funcion
+INNER JOIN Peliculas P ON F.id_pelicula = P.id_pelicula
+INNER JOIN Salas S ON F.id_sala = S.id_sala;
+
+-- 2. AGREGACIÃ“N (Left Join): PelÃ­culas y ventas (Incluso las que no tienen ventas)
+-- AquÃ­ el LEFT JOIN es perfecto para auditorÃ­a: ver quÃ© pelÃ­culas no han vendido nada.
+SELECT P.titulo, COUNT(T.id_ticket) AS Total_Vendidos
+FROM Peliculas P
+LEFT JOIN Funciones F ON P.id_pelicula = F.id_pelicula
+LEFT JOIN Tickets T ON F.id_funcion = T.id_funcion
+GROUP BY P.titulo;
+
+-- 3. AGREGACIÃ“N: Resumen de precios por sala (Ya estaba bien, mantenemos Inner)
+SELECT S.nombre_sala, 
+       AVG(F.precio_base) AS Precio_Promedio,
+       MIN(F.precio_base) AS Precio_Minimo,
+       MAX(F.precio_base) AS Precio_Maximo
+FROM Salas S
+INNER JOIN Funciones F ON S.id_sala = F.id_sala
+GROUP BY S.nombre_sala;
+
+-- 4. JOIN + FILTRO: Clientes y sus compras (Left Join para ver clientes sin compras)
+-- Esto permite identificar clientes registrados que aÃºn no han realizado transacciones.
+SELECT C.nombre, C.membresia, T.id_ticket, T.total
+FROM Clientes C
+LEFT JOIN Tickets T ON C.id_cliente = T.id_cliente;
