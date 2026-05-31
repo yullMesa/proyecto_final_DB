@@ -4,7 +4,7 @@ go
 use SaleTickets
 go
 
--- 1. Tabla de Películas
+-- 1. Tabla de Pelï¿½culas
 CREATE TABLE Peliculas (
     id_pelicula INT PRIMARY KEY IDENTITY(1,1),
     titulo VARCHAR(100) NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE Salas (
     capacidad INT
 );
 
--- 3. Tabla de Funciones (Depende de Peliculas y Salas / proyecto final DB para el sabado en la mañana)
+-- 3. Tabla de Funciones (Depende de Peliculas y Salas / proyecto final DB para el sabado en la maï¿½ana)
 CREATE TABLE Funciones (
     id_funcion INT PRIMARY KEY IDENTITY(1,1),
     id_pelicula INT,
@@ -58,7 +58,7 @@ CREATE TABLE Tickets (
     FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente)
 );
 
--- 7. Tabla de Detalle_Tickets (Relación N:M entre Tickets y Butacas  Yull Sebastina Mesa)
+-- 7. Tabla de Detalle_Tickets (Relaciï¿½n N:M entre Tickets y Butacas  Yull Sebastina Mesa)
 CREATE TABLE Detalle_Tickets (
     id_detalle INT PRIMARY KEY IDENTITY(1,1),
     id_ticket INT,
@@ -66,13 +66,3 @@ CREATE TABLE Detalle_Tickets (
     FOREIGN KEY (id_ticket) REFERENCES Tickets(id_ticket),
     FOREIGN KEY (id_butaca) REFERENCES Butacas(id_butaca)
 );
-
-
--- Agregar la columna de membresía(Esto lo hice despues para poder utilizar el DCL en el proyecto)
-ALTER TABLE Clientes 
-ADD membresia VARCHAR(20) DEFAULT 'Corriente';
-
--- Actualizar los datos existentes para que tengan una categoría
-UPDATE Clientes SET membresia = 'Premium' WHERE id_cliente IN (1, 4, 7, 10);
-UPDATE Clientes SET membresia = 'Platinum' WHERE id_cliente IN (2, 5, 8, 11);
--- Los que no actualizamos quedarán como 'Corriente' por defecto
