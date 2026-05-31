@@ -63,6 +63,8 @@ INNER JOIN Funciones F ON S.id_sala = F.id_sala
 GROUP BY S.nombre_sala;
 
 -- 4. JOIN + FILTRO: Clientes y sus compras (Left Join para ver clientes sin compras)
+
+----Yull mesa aqui dejo constancia de mi nombre para validar mi participacion en la creacion de este proyecto
 -- Esto permite identificar clientes registrados que aún no han realizado transacciones.
 SELECT C.nombre, C.membresia, T.id_ticket, T.total
 FROM Clientes C
